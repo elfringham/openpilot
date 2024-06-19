@@ -101,7 +101,10 @@ class ModelState:
     if prepare_only:
       return None
 
+    t1 = time.perf_counter()
     self.model.execute()
+    t2 = time.perf_counter()
+    print("supercombo run: %.2fms" % (t2 -t1))
     outputs = self.parser.parse_outputs(self.slice_outputs(self.output))
 
     self.inputs['features_buffer'][:-ModelConstants.FEATURE_LEN] = self.inputs['features_buffer'][ModelConstants.FEATURE_LEN:]

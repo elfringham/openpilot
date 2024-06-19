@@ -80,6 +80,7 @@ class ModelState:
     self.model.setInputBuffer("input_img", self.inputs['input_img'].view(np.float32))
     self.model.execute()
     t2 = time.perf_counter()
+    print("dmonitoring process: %.2fms" % (t2 -t1))
     return self.output, t2 - t1
 
 
