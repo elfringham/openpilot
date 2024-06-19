@@ -1,5 +1,6 @@
 demo
 bridge
+remote_sim_bridge
 test_runner
 *.o
 *.os
