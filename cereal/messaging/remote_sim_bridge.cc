@@ -21,12 +21,12 @@ void sigpipe_handler(int sig) {
   std::cout << "SIGPIPE received" << std::endl;
 }
 
-static std::vector<std::string> get_services(std::string whitelist_str) {
+static std::vector<std::string> get_services(std::string whitelist_str, bool local_pub) {
   std::vector<std::string> service_list;
   for (const auto& it : services) {
     std::string name = it.second.name;
     bool in_whitelist = whitelist_str.find(name) != std::string::npos;
-    if (name == "plusFrame" || name == "uiLayoutState" || !in_whitelist) {
+    if (name == "plusFrame" || name == "uiLayoutState" || (!local_pub && !in_whitelist)) {
       continue;
     }
     service_list.push_back(name);
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
   bool local_pub = strcmp(argv[2], "pub") == 0;
   std::string ip = local_pub ? argv[3] : "127.0.0.1";
   std::string servicelist_ui_str = "carControl,controlsState,carParams";
-  std::string servicelist_sim_str = "can,pandaStates,gpsLocationExternal,driverStateV2,peripheralState,roadCameraState,wideRoadCameraState";
+  std::string servicelist_sim_str = "can,pandaStates,gpsLocationExternal,driverStateV2,peripheralState,roadCameraState,roadEncodeData,roadEncodeIdx,wideRoadCameraState,wideRoadEncodeData,wideRoadEncodeIdx";
   //std::string servicelist_sim_str = "can,pandaStates,accelerometer,gyroscope,gpsLocationExternal,driverStateV2,driverMonitoringState,peripheralState,roadCameraState,wideRoadCameraState";
   std::string servicelist_str = local_ui ? servicelist_ui_str : servicelist_sim_str;
   printf("ZeroMQ on IP address %s\r\n", ip.c_str());
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
   }
 
   std::map<SubSocket*, PubSocket*> sub2pub;
-  for (auto endpoint : get_services(servicelist_str)) {
+  for (auto endpoint : get_services(servicelist_str, local_pub)) {
     PubSocket * pub_sock;
     SubSocket * sub_sock;
     if (local_pub) {
