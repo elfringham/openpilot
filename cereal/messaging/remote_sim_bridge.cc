@@ -49,7 +49,8 @@ int main(int argc, char** argv) {
   bool local_pub = strcmp(argv[2], "pub") == 0;
   std::string ip = local_pub ? argv[3] : "127.0.0.1";
   std::string servicelist_ui_str = "carControl,controlsState,carParams";
-  std::string servicelist_sim_str = "can,pandaStates,accelerometer,gyroscope,gpsLocationExternal,driverStateV2,driverMonitoringState,peripheralState,roadCameraState,wideRoadCameraState";
+  std::string servicelist_sim_str = "can,pandaStates,gpsLocationExternal,driverStateV2,peripheralState,roadCameraState,wideRoadCameraState";
+  //std::string servicelist_sim_str = "can,pandaStates,accelerometer,gyroscope,gpsLocationExternal,driverStateV2,driverMonitoringState,peripheralState,roadCameraState,wideRoadCameraState";
   std::string servicelist_str = local_ui ? servicelist_ui_str : servicelist_sim_str;
   printf("ZeroMQ on IP address %s\r\n", ip.c_str());
 
